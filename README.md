@@ -1,17 +1,33 @@
-## Getting Started
+## Code Generator
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+AtcoderやTopcoderなどの競技プログラミングでいちいちテンプレートファイルをコピーしては...というのが死ぬほど面倒だったので作りました。
 
-## Folder Structure
+## 使い方
 
-The workspace contains two folders by default, where:
+- `テンプレートファイルの指定`:自身が所有するテンプレートファイルを指定します。(一応zipとかもいけると思う)
+- `ディレクトリの指定`:生成したい場所を指定します。
+- `タイトルの設定`:生成するディレクトリの名前を設定します。
+- `ディレクトリ構造の設定`:生成したディレクトリ内部でどのようなディレクトリ構造をとるかを指定します
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+# ディレクトリ構造の正規表現
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+- `alpha,beta,...`:alpha,betaのようにディレクトリを生成します
+- `a-z`,`1-100` : aからzまで、1から100までのディレクトリを生成します
+- `app/main` : appディレクトリ内にmainディレクトリを生成します
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+例
+
+App/bin,lib,src
+App内にbin,lib,srcを生成し、内部にテンプレートファイルを生成します。
+
+a-z/aiueo,kakikukeko
+aからzまでのフォルダ内にaiueoとkakikukekoを生成し、内部にテンプレートファイルを生成します。
+## フォルダ構造
+
+- `src`: ソースファイルです。
+- `src/frame`: フレームでの処理についてです。
+
+> エラー等がありましたら随時対応します(気が向いたらの意)
 
 ## Dependency Management
 

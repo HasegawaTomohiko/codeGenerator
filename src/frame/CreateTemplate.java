@@ -11,6 +11,7 @@ import java.io.File;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -19,20 +20,28 @@ public class CreateTemplate extends JPanel implements ActionListener{
 
   private final int HEIGHT = 10;
   private final int WIDTH = 400;
-  private final int TEXT_HEIGHT = 30;
+  private final int TEXT_HEIGHT = 40;
   private final int TEXT_WIDTH_FILE = 200;
   private final int TEXT_WIDTH_OTHER = 250;
+  private final int LABEL_FONT = 18;
+  private final int TEXT_FONT = 16;
+
+  JPanel tempPanel = new JPanel();
+  JPanel rootPanel = new JPanel();
+  JPanel titlePanel = new JPanel();
+  JPanel directoryPanel = new JPanel();
+  JPanel lowerPanel = new JPanel();
 
   JLabel labelTemplate = new JLabel("テンプレートファイル");
-  JTextField textTemplate = new JTextField(35);
-  JButton buttonTemplate = new JButton("ファイルを開く");
   JLabel labelRoot = new JLabel("生成先ディレクトリ");
-  JTextField textRoot = new JTextField(35);
-  JButton buttonRoot = new JButton("フォルダを開く");
   JLabel labelTitle = new JLabel("タイトル");
-  JTextField textTitle = new JTextField(40);
   JLabel labelDirectory = new JLabel("ディレクトリ構成(','区切りで各ディレクトリを生成します)");
+  JTextField textTemplate = new JTextField(35);
+  JTextField textRoot = new JTextField(35);
+  JTextField textTitle = new JTextField(40);
   JTextField textDirectory = new JTextField(40);
+  JButton buttonTemplate = new JButton("ファイルを開く");
+  JButton buttonRoot = new JButton("フォルダを開く");
   JButton submit = new JButton("生成");
   JButton setting = new JButton("設定");
 
@@ -41,24 +50,22 @@ public class CreateTemplate extends JPanel implements ActionListener{
     setPreferredSize(new Dimension(250,270));
     setBackground(Color.white);
     setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-    JPanel tempPanel = new JPanel();
-    JPanel rootPanel = new JPanel();
-    JPanel titlePanel = new JPanel();
-    JPanel directoryPanel = new JPanel();
-    JPanel lowerPanel = new JPanel();
-
+  
     textTemplate.setPreferredSize(new Dimension(TEXT_WIDTH_FILE,TEXT_HEIGHT));
     textRoot.setPreferredSize(new Dimension(TEXT_WIDTH_FILE,TEXT_HEIGHT));
     textTitle.setPreferredSize(new Dimension(TEXT_WIDTH_OTHER,TEXT_HEIGHT));
     textDirectory.setPreferredSize(new Dimension(TEXT_WIDTH_OTHER,TEXT_HEIGHT));
-
+  
     buttonTemplate.addActionListener(this);
     buttonRoot.addActionListener(this);
-
+    submit.addActionListener(this);
+    setting.addActionListener(this);
+  
     labelTemplate.setFont(new Font(Font.SERIF,Font.BOLD,18));
     labelRoot.setFont(new Font(Font.SERIF,Font.BOLD,18));
     labelTitle.setFont(new Font(Font.SERIF,Font.BOLD,18));
     labelDirectory.setFont(new Font(Font.SERIF,Font.BOLD,18));
+
 
     add(labelTemplate);
     add(tempPanel);
@@ -119,6 +126,29 @@ public class CreateTemplate extends JPanel implements ActionListener{
       //構文チェック()
       //エラー -> ポップアップでもう一度入力させる
       //実行している
+    }
+    if(e.getSource() == setting){
+
+      /* 新規クラス:SettingFrameを生成します。 */
+
+      JFrame settingFrame = new JFrame("設定");
+      settingFrame.setSize(300,400);
+      settingFrame.setResizable(false);
+      settingFrame.setBackground(Color.white);
+      settingFrame.setVisible(true);
+      JLabel templateFileLabel = new JLabel("テンプレートファイルを指定");
+      JLabel rootDirectoryLable =new JLabel("ルートディレクトリを指定");
+      JTextField templateFileText = new JTextField(40);
+      JTextField rootDirectoryText = new JTextField(40);
+      JButton templateFileButton = new JButton("ファイルを指定");
+      JButton rootDirectoryButton = new JButton("フォルダを指定");
+
+      settingFrame.add(templateFileLabel);
+      settingFrame.add(templateFileText);
+      settingFrame.add(templateFileButton);
+      settingFrame.add(rootDirectoryLable);
+      settingFrame.add(rootDirectoryText);
+      settingFrame.add(rootDirectoryButton);
     }
   }
 }
