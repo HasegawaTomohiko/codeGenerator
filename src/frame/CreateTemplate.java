@@ -7,11 +7,14 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Properties;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -25,7 +28,10 @@ public class CreateTemplate extends JPanel implements ActionListener{
   private final int TEXT_WIDTH_OTHER = 250;
   private final int LABEL_FONT = 18;
   private final int TEXT_FONT = 16;
+  private final String INI_PATH = "./codeGenerator.properties";
 
+  private Properties properties = new Properties();
+  
   JPanel tempPanel = new JPanel();
   JPanel rootPanel = new JPanel();
   JPanel titlePanel = new JPanel();
@@ -45,8 +51,12 @@ public class CreateTemplate extends JPanel implements ActionListener{
   JButton submit = new JButton("生成");
   JButton setting = new JButton("設定");
 
+  
+  
+
 
   public CreateTemplate(){
+    
     setPreferredSize(new Dimension(250,270));
     setBackground(Color.white);
     setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
@@ -65,6 +75,7 @@ public class CreateTemplate extends JPanel implements ActionListener{
     labelRoot.setFont(new Font(Font.SERIF,Font.BOLD,18));
     labelTitle.setFont(new Font(Font.SERIF,Font.BOLD,18));
     labelDirectory.setFont(new Font(Font.SERIF,Font.BOLD,18));
+
 
 
     add(labelTemplate);
@@ -104,23 +115,46 @@ public class CreateTemplate extends JPanel implements ActionListener{
   @Override
   public void actionPerformed(ActionEvent e) {
     if(e.getSource() == buttonTemplate){
-      JFileChooser fileChooser = new JFileChooser();
-      fileChooser.setCurrentDirectory(new File("C:\\Programing\\Java\\Atcoder\\codeGenerator\\template"));
-      int returnVal = fileChooser.showOpenDialog(this);
-      if(returnVal == JFileChooser.APPROVE_OPTION){
-        File file = fileChooser.getSelectedFile();
-        textTemplate.setText(file.getAbsolutePath());
+      String tempFile;
+      String rootDirectory;
+      try{
+        properties.load(Files.newBufferedReader(Paths.get(INI_PATH)));
+        tempFile = properties.getProperty("templateFile");
+        rootDirectory = properties.getProperty("rootDirectory");
+        System.out.printf("template file:%s\n",tempFile);
+        System.out.printf("root directory:%s\n",rootDirectory);
+        
+        JFileChooser fileChooser = new JFileChooser(new File(tempFile));
+        int returnVal = fileChooser.showOpenDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION){
+          File file = fileChooser.getSelectedFile();
+          textTemplate.setText(file.getAbsolutePath());
+        }
+      }catch(IOException exseption){
+        System.out.println(String.format("ファイルの読取に失敗 ファイル名:%s",INI_PATH));
       }
     }
     if(e.getSource() == buttonRoot){
-      JFileChooser direChooser = new JFileChooser();
-      direChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-      direChooser.setCurrentDirectory(new File(".\\"));
-      int returnVal = direChooser.showOpenDialog(this);
-      if(returnVal == JFileChooser.APPROVE_OPTION){
-        File directory = direChooser.getSelectedFile();
-        textRoot.setText(directory.getAbsolutePath());
+      String tempFile;
+      String rootDirectory;
+      try{
+        properties.load(Files.newBufferedReader(Paths.get(INI_PATH)));
+        tempFile = properties.getProperty("templateFile");
+        rootDirectory = properties.getProperty("rootDirectory");
+        System.out.printf("template file:%s\n",tempFile);
+        System.out.printf("root directory:%s\n",rootDirectory);
+        JFileChooser direChooser = new JFileChooser();
+        direChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        direChooser.setCurrentDirectory(new File(rootDirectory));
+        int returnVal = direChooser.showOpenDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION){
+          File directory = direChooser.getSelectedFile();
+          textRoot.setText(directory.getAbsolutePath());
+        }
+      }catch(IOException exseption){
+        System.out.println(String.format("ファイルの読取に失敗 ファイル名:%s",INI_PATH));
       }
+      
     }
     if(e.getSource() == submit){
       //構文チェック()
@@ -130,25 +164,8 @@ public class CreateTemplate extends JPanel implements ActionListener{
     if(e.getSource() == setting){
 
       /* 新規クラス:SettingFrameを生成します。 */
+      new SettingFrame();
 
-      JFrame settingFrame = new JFrame("設定");
-      settingFrame.setSize(300,400);
-      settingFrame.setResizable(false);
-      settingFrame.setBackground(Color.white);
-      settingFrame.setVisible(true);
-      JLabel templateFileLabel = new JLabel("テンプレートファイルを指定");
-      JLabel rootDirectoryLable =new JLabel("ルートディレクトリを指定");
-      JTextField templateFileText = new JTextField(40);
-      JTextField rootDirectoryText = new JTextField(40);
-      JButton templateFileButton = new JButton("ファイルを指定");
-      JButton rootDirectoryButton = new JButton("フォルダを指定");
-
-      settingFrame.add(templateFileLabel);
-      settingFrame.add(templateFileText);
-      settingFrame.add(templateFileButton);
-      settingFrame.add(rootDirectoryLable);
-      settingFrame.add(rootDirectoryText);
-      settingFrame.add(rootDirectoryButton);
     }
   }
 }
